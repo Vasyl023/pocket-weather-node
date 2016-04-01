@@ -1,10 +1,31 @@
-var express = require('express');
-var app = express();
+'use strict';
 
+const Hapi = require('hapi');
+const OpenWeather = require('./models/OpenWeather');
 
+const server = new Hapi.Server();
 
-var server = app.listen(9000, function () {
-  var host = server.address().address
-  var port = server.address().port
-  console.log('Server listening at http://%s:%s', host, port)
+server.connection({
+    host: 'localhost',
+    port: 8000
+});
+
+server.route({
+    method: 'GET',
+    path: '/weather/{lat}/{lon}',
+    handler: function (req, reply) {
+        let weather = new OpenWeather();
+        weather
+            .getCurrentWeather(request.params.lat, request.params.lon)
+            .then((wthr) => {
+                reply(wthr);
+            })
+    }
+});
+
+server.start((err) => {
+    if (err) {
+        throw err;
+    }
+    console.log('Server running at:', server.info.uri);
 });
