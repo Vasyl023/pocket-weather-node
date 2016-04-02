@@ -16,9 +16,9 @@ server.route({
     handler: function (req, reply) {
         let weather = new OpenWeather();
         weather
-            .getCurrentWeather(req.params.lat, req.params.lon)
-            .then((wthr) => {
-                reply(wthr);
+            .getWeatherJSONObject(req.params.lat, req.params.lon)
+            .then((data) => {
+                reply(data);
             })
     }
 });
