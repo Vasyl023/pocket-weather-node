@@ -1,7 +1,8 @@
 'use strict';
 
-const Hapi = require('hapi');
+const Hapi        = require('hapi');
 const OpenWeather = require('./models/OpenWeather');
+const Youtube     = require('./models/Youtube');
 
 const server = new Hapi.Server();
 
@@ -19,6 +20,22 @@ server.route({
             .getWeatherJSONObject(req.params.lat, req.params.lon)
             .then((data) => {
                 reply(data);
+            })
+    }
+});
+
+server.route({
+   method: 'GET',
+   path: '/yt/{q}/',
+    handler: function(req, reply) {
+        let youtube = new Youtube();
+        let songsList = req.params.q.split(',');
+        youtube
+            .searchFor(songsList, 1)
+            .then((res) => {
+                reply(
+                    res.map(el => JSON.parse(el).items[0].id.videoId)
+                );
             })
     }
 });
