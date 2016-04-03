@@ -19,5 +19,8 @@
   "dependencies": {
     "hapi": "^13.2.2",
     "request-promise": "^2.0.1"
+  },
+  "devDependencies": {
+    "fs": "0.0.2"
   }
 }
