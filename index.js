@@ -43,7 +43,10 @@ server.route({
 			//	})
 			//})
 			//.then((res) => console.log(res))
-			.then((res) => reply(res))
+			.then((res) => reply({
+				weather: res[0],
+				playlist: res[1]
+			}))
 			.catch(err => console.log(err));
 	}
 });
