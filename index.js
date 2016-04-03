@@ -25,7 +25,12 @@ server.route({
 		weather
 			.getWeatherJSONObject(req.params.lat, req.params.lon)
 			.then((data) => {
-				return deezer.getPlaylist(data.weatherSlogan);
+				return Promise.all(
+					[
+						Promise.resolve(data),
+						deezer.getPlaylist(data.weatherSlogan)
+					]
+				);
 			})
 			//.then((res) => {
 			//	return Promise.all(
