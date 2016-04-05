@@ -1,5 +1,4 @@
 const rp = require('request-promise');
-const fs = require('fs');
 const logger = require('./Logger');
 	class Deezer {
 

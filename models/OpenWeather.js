@@ -1,13 +1,11 @@
 const rp = require('request-promise');
-const fs = require('fs');
 const logger = require('./Logger');
-//const logger = new Logger();
+
 class OpenWeather {
 
 	constructor() {
 		this.apiKey = '7ed77a066ff8ff1b42915e7c136db3a6';
 		this.baseUrl = 'http://api.openweathermap.org/data/2.5/';
-		//this.logger = new Logger();
 	}
 
 	getCurrentWeather(lat, lon) {
@@ -51,16 +49,7 @@ class OpenWeather {
 			return res;
 		});
 
-		logger.cacheSet('weather', {
-			weatherTime: weatherData.dt,
-			weatherTemperature: weatherData.main.temp,
-			locationName: weatherData.name,
-			weatherSlogan: weatherData.weather[0].description,
-			weatherGroupId: getWeatherGroupId(weatherData.weather[0].id),
-			weatherId: weatherData.weather[0].id
-		});
-
-		return {
+		let weatherJSONObject = {
 			weatherTime: weatherData.dt,
 			weatherTemperature: weatherData.main.temp,
 			locationName: weatherData.name,
@@ -68,6 +57,9 @@ class OpenWeather {
 			weatherGroupId: getWeatherGroupId(weatherData.weather[0].id),
 			weatherId: weatherData.weather[0].id
 		};
+
+		logger.cacheSet('weather', weatherJSONObject);
+		return weatherJSONObject;
 
 	}
 
