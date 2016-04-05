@@ -1,11 +1,9 @@
 const rp = require('request-promise');
 const fs = require('fs');
-
-
+const logger = require('./Logger');
 	class Deezer {
 
 		constructor() {
-
 		}
 
 		search(q) {
@@ -13,23 +11,22 @@ const fs = require('fs');
 		}
 
 		getPlaylist(q) {
+			//let weather = ['clear sky', 'broken clouds'];
+			/clouds/.test(q) && (q = 'clouds');
 			return this.search(q).then((res) => {
+				let plNames = JSON.parse(res).data.map(pl => pl.title);
+				logger.cacheSet('matchingPlaylists', plNames);
 				return this.getTracks(JSON.parse(res))
-			})
+			});
 		}
 
 		getTracks(res) {
-
-			var limit = res.total >= 25 ? 25 : res.total - 1;
+			var limit = res.total >= 25 ? 24 : res.total - 1;
 			var idx = Math.floor(Math.random() * (limit - 0 + 1));
-
 			//console.log('\n-----------\nDEEZER RESPONSE:', res.total);
 			//console.log(`INDEX  --> ${idx}`);
-			fs.appendFile('./log.txt', '\nDeezer:\n'+JSON.stringify({
-				playlistData: res.data[idx]
-			}), err => {
-				console.log(err)
-			});
+
+			logger.cacheSet('playlistData', res.data[idx]);
 
 			let playlistTracksUrl = res.data[idx]['tracklist'];
 

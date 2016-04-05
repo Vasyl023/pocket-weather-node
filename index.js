@@ -5,9 +5,10 @@ const rp = require('request-promise');
 const OpenWeather = require('./models/OpenWeather');
 const Youtube = require('./models/Youtube');
 const Deezer = require('./models/Deezer');
+const logger = require('./models/Logger');
 
 const server = new Hapi.Server();
-//var resp;
+
 server.connection({
 	host: 'localhost',
 	port: 8000
@@ -32,17 +33,18 @@ server.route({
 					]
 				);
 			})
-			//.then((res) => {
-			//	return Promise.all(
-			//		res.map((el) => el.youtubeId)
-			//	)
-			//})
-			//.then((res) => {
-			//	return resp.forEach((el, i) => {
-			//		el.youtubeId = res[i];
-			//	})
-			//})
-			//.then((res) => console.log(res))
+			.then((res) => {
+				return Promise.all(
+					[
+						Promise.resolve(res[0]),
+						Promise.resolve(res[1])
+					]
+				)
+			})
+			.then((res) => {
+				logger.unloadCache(`https://api.mongolab.com/api/1/databases/mongodb/collections/pocket_weather_log?apiKey=eTCiaa0zEzzP5ywGrdohk7bv6V8_uMen`);
+				return res;
+			})
 			.then((res) => reply({
 				weather: res[0],
 				playlist: res[1]
@@ -56,14 +58,13 @@ server.route({
 	path: '/yt/{q}/',
 	handler: function (req, reply) {
 		let youtube = new Youtube();
-		let songsList = req.params.q.split(',');
 		youtube
-			.searchFor(songsList, 1)
+			.search('muse - panic station', 1)
 			.then((res) => {
-				reply(
-					res.map(el => JSON.parse(el).items[0].id.videoId)
-				);
+				console.log(res);
+				reply(res);
 			})
+			.catch(err => console.log(err));
 	}
 });
 
