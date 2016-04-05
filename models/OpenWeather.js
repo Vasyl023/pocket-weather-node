@@ -22,7 +22,8 @@ class OpenWeather {
 			.getCurrentWeather(lat, lon)
 			.then((res) => {
 				return this.prepareRawData(res);
-			});
+			})
+			.catch(err => console.log(err));
 	}
 
 	/*

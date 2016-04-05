@@ -11,7 +11,13 @@ const logger = require('./Logger');
 
 		getPlaylist(q) {
 			//let weather = ['clear sky', 'broken clouds'];
-			/clouds/.test(q) && (q = 'clouds');
+			/*
+			if (/(clear sky)|(few|scattered) clouds/.test(q)) {
+				q = ['clear sky', 'sun shining', 'sunny', 'sunshine'];
+			} else if (/(broken|overcast) clouds/.test(q)) {
+				q = ['clouds'];
+			}
+			*/
 			return this.search(q).then((res) => {
 				let plNames = JSON.parse(res).data.map(pl => pl.title);
 				logger.cacheSet('matchingPlaylists', plNames);
@@ -20,34 +26,44 @@ const logger = require('./Logger');
 		}
 
 		getTracks(res) {
-			var limit = res.total >= 25 ? 24 : res.total - 1;
-			var idx = Math.floor(Math.random() * (limit - 0 + 1));
+			const limit = res.total >= 25 ? 24 : res.total - 1;
+			const idx = Math.floor(Math.random() * (limit + 1));
 			//console.log('\n-----------\nDEEZER RESPONSE:', res.total);
 			//console.log(`INDEX  --> ${idx}`);
+			const playlistData = res.data[idx];
+			logger.cacheSet('playlistData', playlistData);
 
-			logger.cacheSet('playlistData', res.data[idx]);
-
-			let playlistTracksUrl = res.data[idx]['tracklist'];
+			const playlistTracksUrl = playlistData['tracklist'];
 
 			//console.log('DATA', res.data[idx]);
 
 			return rp(playlistTracksUrl).then((res) => {
-				return this.processPlaylistTracks(JSON.parse(res))
+				return this.processPlaylistTracks(playlistData, JSON.parse(res))
 			});
 
 		}
 
-		processPlaylistTracks(res) {
-			return res.data.map((el) => {
+		processPlaylistTracks(plData, res) {
+
+				const tracks = res.data.map((el) => {
 				return {
 					title: el.title,
 					duration: el.duration,
 					source: el.preview,
 					artist: el.artist.name,
 					cover: el.album.cover_small
-					//youtubeId: youtube.search(`${el.title} - ${el.artist}`, 1)
 				}
 			});
+
+			plData = {
+				title: plData.title,
+				link: plData.link,
+				cover: plData.picture,
+				author: plData.user.name
+			};
+
+			plData.tracks = tracks;
+			return plData;
 		}
 
 	}
