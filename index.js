@@ -17,7 +17,6 @@ server.route({
 	method: 'GET',
 	path: '/weather/{lat}/{lon}',
 	handler: function (req, reply) {
-
 		const weather = new OpenWeather();
 		const deezer = new Deezer();
 		weather
