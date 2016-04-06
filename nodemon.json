@@ -1,0 +1,5 @@
+{
+  "events": {
+    "restart": "node send-req.js"
+  }
+}

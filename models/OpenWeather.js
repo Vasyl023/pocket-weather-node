@@ -61,7 +61,6 @@ class OpenWeather {
 
 		logger.cacheSet('weather', weatherJSONObject);
 		return weatherJSONObject;
-
 	}
 
 }
