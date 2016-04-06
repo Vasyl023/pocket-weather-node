@@ -24,7 +24,9 @@ class Deezer {
 
 		// TODO:
 		// [daytime block]
+		// if
 		// [season block]
+		// if
 
 		return keywords.length ? keywords : criteria;
 	}
