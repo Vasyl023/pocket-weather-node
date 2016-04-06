@@ -21,6 +21,7 @@
     "request-promise": "^2.0.1"
   },
   "devDependencies": {
-    "node-schedule": "^1.1.0"
+    "node-schedule": "^1.1.0",
+    "nodemon": "^1.9.1"
   }
 }
