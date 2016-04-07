@@ -32,15 +32,6 @@ class OpenWeather {
 	 */
 	prepareRawData(weatherData) {
 
-		// 1: Clear
-		// 2: Thunderstorm
-		// 3: Drizzle
-		// 5: Rain
-		// 6: Snow
-		// 7: Atmosphere
-		// 8: Clouds
-		// 9: Extreme
-
 		var weatherData = JSON.parse(weatherData);
 
 		let getWeatherGroupId = ((weatherId) => {
