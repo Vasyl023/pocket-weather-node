@@ -10,7 +10,7 @@ class Deezer {
 	}
 
 	getKeywords(criteria) {
-		var keywords;
+		var keywords = [];
 		// [weather block]
 		if (/(clear sky)|(few|scattered) clouds/.test(criteria)) {
 			keywords = ['clear sky', 'sun shining', 'sunny', 'sunshine'];
@@ -26,7 +26,7 @@ class Deezer {
 		// [daytime block]
 		// [season block]
 
-		return keywords.length ? keywords : criteria;
+		return keywords.length ? keywords : [criteria];
 	}
 
 	getPlaylist(q) {
